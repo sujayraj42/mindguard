@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MindGuard - AI-powered student mental health prediction portal. Track your wellness, predict burnout, and get anonymous support.">
+  <title>MindGuard – Student Mental Health Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <!-- Particle Background -->
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="landing-page">
+    <!-- Navigation -->
+    <nav style="position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px);background:rgba(10,10,26,0.5);border-bottom:1px solid rgba(139,92,246,0.1);">
+      <div style="display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.25rem;">
+        <span style="font-size:1.5rem;">🧠</span>
+        <span class="text-gradient">MindGuard</span>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+        <a href="signup.html" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-glow hero-glow-1"></div>
+      <div class="hero-glow hero-glow-2"></div>
+
+      <div class="hero-badge">
+        <span>🛡️</span>
+        <span>AI-Powered Mental Wellness</span>
+      </div>
+
+      <h1>
+        Your Mind <span class="text-gradient">Matters</span>.<br>
+        We Help You <span class="text-gradient">Protect</span> It.
+      </h1>
+
+      <p>
+        A proactive mental health dashboard that tracks behavioral patterns, predicts burnout early with AI,
+        and connects you anonymously with counselors and peers who understand.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="signup.html" class="btn btn-primary btn-lg">
+          <span>🚀</span> Start Your Journey
+        </a>
+        <a href="#features" class="btn btn-secondary btn-lg">
+          <span>✨</span> Explore Features
+        </a>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-card glass-card animate-fadeInUp delay-1">
+          <div class="stat-number" id="stat-students">10,000+</div>
+          <div class="stat-label">Students Protected</div>
+        </div>
+        <div class="stat-card glass-card animate-fadeInUp delay-2">
+          <div class="stat-number">85%+</div>
+          <div class="stat-label">Prediction Accuracy</div>
+        </div>
+        <div class="stat-card glass-card animate-fadeInUp delay-3">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Anonymous Support</div>
+        </div>
+        <div class="stat-card glass-card animate-fadeInUp delay-4">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Privacy First</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+      <h2>Powerful <span class="text-gradient">Features</span></h2>
+      <p class="features-subtitle">
+        12 intelligent modules designed to support every aspect of your mental wellness journey.
+      </p>
+
+      <div class="features-grid">
+        <!-- F1 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-1">
+          <div class="feature-icon">📋</div>
+          <h3>Behavioral Logger</h3>
+          <p>Quick 2-minute weekly check-ins tracking sleep, stress, socialization, study hours, and mood.</p>
+        </div>
+        <!-- F2 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-2">
+          <div class="feature-icon">🤖</div>
+          <h3>AI Risk Engine</h3>
+          <p>Machine learning model analyzes your patterns and predicts burnout risk with 85%+ accuracy.</p>
+        </div>
+        <!-- F3 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-3">
+          <div class="feature-icon">🔒</div>
+          <h3>Anonymous Counselor</h3>
+          <p>Connect with professional counselors anonymously. Reveal your identity only when you're ready.</p>
+        </div>
+        <!-- F4 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-4">
+          <div class="feature-icon">👥</div>
+          <h3>Peer Support Circles</h3>
+          <p>AI-grouped anonymous rooms connecting you with peers facing similar challenges.</p>
+        </div>
+        <!-- F5 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-1">
+          <div class="feature-icon">📓</div>
+          <h3>Mood Journal</h3>
+          <p>Express your thoughts freely with sentiment analysis, mood heatmap, and word clouds.</p>
+        </div>
+        <!-- F6 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-2">
+          <div class="feature-icon">🏆</div>
+          <h3>Gamification</h3>
+          <p>Earn XP, unlock badges, maintain streaks, and climb the wellness leaderboard.</p>
+        </div>
+        <!-- F7 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-3">
+          <div class="feature-icon">🆘</div>
+          <h3>Emergency SOS</h3>
+          <p>One-tap crisis button with instant access to helplines and professional resources.</p>
+        </div>
+        <!-- F8 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-4">
+          <div class="feature-icon">📊</div>
+          <h3>Admin Analytics</h3>
+          <p>University counseling dashboard with aggregate risk trends and engagement insights.</p>
+        </div>
+        <!-- F9 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-1">
+          <div class="feature-icon">🧘</div>
+          <h3>Breathing & Meditation</h3>
+          <p>Interactive guided breathing exercises and timed meditation sessions with ambient sounds.</p>
+        </div>
+        <!-- F10 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-2">
+          <div class="feature-icon">😴</div>
+          <h3>Sleep Analyzer</h3>
+          <p>Deep sleep quality insights, optimal sleep recommendations, and correlation charts.</p>
+        </div>
+        <!-- F11 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-3">
+          <div class="feature-icon">🔔</div>
+          <h3>Smart Nudges</h3>
+          <p>Gentle reminders to check in, motivational quotes, and milestone celebrations.</p>
+        </div>
+        <!-- F12 -->
+        <div class="feature-card glass-card animate-fadeInUp delay-4">
+          <div class="feature-icon">💬</div>
+          <h3>Anonymous Forum</h3>
+          <p>Community Q&A board with upvotes, topic tagging, and threaded discussions.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section style="padding:80px 24px;">
+      <div class="container">
+        <h2 style="text-align:center;font-size:2.5rem;margin-bottom:48px;">How <span class="text-gradient">It Works</span></h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px;max-width:1000px;margin:0 auto;">
+          <div class="glass-card" style="padding:32px;text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:16px;">1️⃣</div>
+            <h3 style="margin-bottom:8px;">Sign Up Anonymously</h3>
+            <p style="color:var(--text-secondary);font-size:0.9rem;">Create your account — your privacy is our priority from day one.</p>
+          </div>
+          <div class="glass-card" style="padding:32px;text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:16px;">2️⃣</div>
+            <h3 style="margin-bottom:8px;">Weekly Check-In</h3>
+            <p style="color:var(--text-secondary);font-size:0.9rem;">2 minutes each week. Log your sleep, stress, mood, and more.</p>
+          </div>
+          <div class="glass-card" style="padding:32px;text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:16px;">3️⃣</div>
+            <h3 style="margin-bottom:8px;">AI Predicts Risk</h3>
+            <p style="color:var(--text-secondary);font-size:0.9rem;">Our ML model analyzes patterns and alerts you before burnout hits.</p>
+          </div>
+          <div class="glass-card" style="padding:32px;text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:16px;">4️⃣</div>
+            <h3 style="margin-bottom:8px;">Get Support</h3>
+            <p style="color:var(--text-secondary);font-size:0.9rem;">Connect anonymously with counselors and peers who understand.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-box glass-card-static">
+        <h2>Ready to Take Control of Your <span class="text-gradient">Wellbeing</span>?</h2>
+        <p>Join thousands of students using MindGuard to stay ahead of stress and burnout.</p>
+        <div class="hero-buttons">
+          <a href="signup.html" class="btn btn-primary btn-lg">
+            <span>🧠</span> Create Free Account
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding:40px 24px;text-align:center;border-top:1px solid var(--border-subtle);">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;">
+        <span style="font-size:1.25rem;">🧠</span>
+        <span class="text-gradient" style="font-family:'Space Grotesk',sans-serif;font-weight:800;">MindGuard</span>
+      </div>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:8px;">
+        Built with ❤️ for student mental health
+      </p>
+      <p style="color:var(--text-muted);font-size:0.75rem;">
+        © 2026 MindGuard. All rights reserved. | 
+        <a href="#" style="color:var(--text-muted);">Privacy Policy</a> | 
+        <a href="#" style="color:var(--text-muted);">Terms of Service</a>
+      </p>
+    </footer>
+  </div>
+
+  <script src="js/particles.js"></script>
+</body>
+</html>
