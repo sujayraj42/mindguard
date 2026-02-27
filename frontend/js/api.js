@@ -6,7 +6,7 @@
 // Auto-detect API base: production (Render) or local dev
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:8000/api'
-    : 'https://mindguard-api.onrender.com/api';  // Update after Render deploy
+    : 'https://mindguard-api.onrender.com/api';  // Update with your Render URL
 
 const Api = {
     getToken() {

@@ -30,6 +30,7 @@ _origins = [
     "http://127.0.0.1:5500",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://mindguard-fawn.vercel.app",
 ]
 if _frontend_url:
     _origins.append(_frontend_url)
