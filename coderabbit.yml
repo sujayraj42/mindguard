@@ -1,9 +1,11 @@
-reviews:
-  auto_review: true
-  request_changes_workflow: true
+name: CodeRabbit
 
-chat:
-  auto_reply: true
+on:
+  pull_request:
+    types: [opened, synchronize]
 
-code_generation:
-  docstrings: true
+jobs:
+  coderabbit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: coderabbitai/coderabbit-action@v1
