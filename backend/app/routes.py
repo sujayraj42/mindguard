@@ -24,6 +24,8 @@ router = APIRouter()
 @router.post("/api/auth/signup", response_model=TokenResponse)
 async def signup(data: UserSignup):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
 
     # Check existing
     existing = await db.users.find_one({"email": data.email})
@@ -65,6 +67,8 @@ async def signup(data: UserSignup):
 @router.post("/api/auth/login", response_model=TokenResponse)
 async def login(data: UserLogin):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
 
     user = await db.users.find_one({"email": data.email})
     if not user or not verify_password(data.password, user["password"]):
@@ -93,6 +97,8 @@ async def login(data: UserLogin):
 @router.get("/api/auth/me", response_model=UserResponse)
 async def get_me(user_id: str = Depends(get_current_user)):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
     user = await db.users.find_one({"_id": ObjectId(user_id)})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -116,6 +122,8 @@ async def get_me(user_id: str = Depends(get_current_user)):
 @router.post("/api/checkin", response_model=CheckinResponse)
 async def create_checkin(data: CheckinCreate, user_id: str = Depends(get_current_user)):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
 
     # Calculate risk score
     risk_score = calculate_risk(data)
@@ -157,6 +165,8 @@ async def create_checkin(data: CheckinCreate, user_id: str = Depends(get_current
 @router.get("/api/checkins")
 async def get_checkins(user_id: str = Depends(get_current_user)):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
     cursor = db.checkins.find({"user_id": user_id}).sort("logged_at", -1).limit(52)
     checkins = []
     async for doc in cursor:
@@ -224,6 +234,8 @@ async def create_journal(data: JournalCreate, user_id: str = Depends(get_current
 @router.get("/api/journal")
 async def get_journal(user_id: str = Depends(get_current_user)):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
     cursor = db.journal.find({"user_id": user_id}).sort("created_at", -1).limit(50)
     entries = []
     async for doc in cursor:
@@ -276,6 +288,8 @@ async def create_forum_post(data: ForumPostCreate, user_id: str = Depends(get_cu
 @router.get("/api/forum")
 async def get_forum_posts():
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
     cursor = db.forum_posts.find().sort("created_at", -1).limit(50)
     posts = []
     async for doc in cursor:

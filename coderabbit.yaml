@@ -1,0 +1,9 @@
+reviews:
+  auto_review: true
+  request_changes_workflow: true
+
+chat:
+  auto_reply: true
+
+code_generation:
+  docstrings: true

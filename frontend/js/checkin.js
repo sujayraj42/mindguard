@@ -28,9 +28,10 @@ async function submitCheckin() {
         stress_level: parseInt(document.getElementById('stress-range').value),
         socialization: parseInt(document.getElementById('social-range').value),
         study_hours: parseFloat(document.getElementById('study-range').value),
-        mood: currentMood,
-        logged_at: new Date().toISOString()
+        mood: currentMood
     };
+    // logged_at is set by the server; keep a local copy for fallback display
+    data.logged_at = new Date().toISOString();
 
     // Calculate risk score locally (basic heuristic, will be replaced by ML)
     const riskScore = calculateRiskScore(data);
@@ -39,7 +40,13 @@ async function submitCheckin() {
 
     // Try API first, fallback to local
     try {
-        const res = await Api.post('/checkin', data);
+        const res = await Api.post('/checkin', {
+            sleep_hours: data.sleep_hours,
+            stress_level: data.stress_level,
+            socialization: data.socialization,
+            study_hours: data.study_hours,
+            mood: data.mood
+        });
         if (res.success && res.data) {
             // Use server-computed risk score
             data.risk_score = res.data.risk_score;

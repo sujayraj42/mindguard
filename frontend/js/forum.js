@@ -62,7 +62,7 @@ async function initForum() {
 function renderForumPosts() {
   const container = document.getElementById('forum-posts');
   const storedPosts = Store.get('forum_posts', []);
-  const allPosts = [...storedPosts.reverse(), ...DEMO_POSTS];
+  const allPosts = [...[...storedPosts].reverse(), ...DEMO_POSTS];
 
   container.innerHTML = allPosts.map(post => {
     const replyCount = (post.replies || []).length;

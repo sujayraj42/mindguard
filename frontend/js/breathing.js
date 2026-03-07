@@ -84,6 +84,9 @@ function runBreathingCycle(phases, circle, text, instruction) {
 }
 
 function stopBreathing() {
+    // Track whether a session was actually running
+    const wasActive = breathingTimeout !== null;
+
     if (breathingTimeout) clearTimeout(breathingTimeout);
     if (breathingInterval) clearInterval(breathingInterval);
     breathingTimeout = null;
@@ -105,19 +108,21 @@ function stopBreathing() {
         boxBtn.disabled = false;
     }
 
-    // Track session
-    breathingSessions++;
-    Store.set('breathing_sessions', (Store.get('breathing_sessions', 0)) + 1);
+    // Only count a completed session if one was actually running
+    if (wasActive) {
+        breathingSessions++;
+        Store.set('breathing_sessions', (Store.get('breathing_sessions', 0)) + 1);
 
-    // Check badge
-    const totalSessions = Store.get('breathing_sessions', 0);
-    if (totalSessions >= 10) {
-        const user = Auth.getUser();
-        if (user && !(user.badges || []).includes('zen_master')) {
-            user.badges = [...(user.badges || []), 'zen_master'];
-            user.xp = (user.xp || 0) + 100;
-            Auth.updateUser(user);
-            showToast('🏅 Badge Unlocked: Zen Master!', 'success');
+        // Check badge
+        const totalSessions = Store.get('breathing_sessions', 0);
+        if (totalSessions >= 10) {
+            const user = Auth.getUser();
+            if (user && !(user.badges || []).includes('zen_master')) {
+                user.badges = [...(user.badges || []), 'zen_master'];
+                user.xp = (user.xp || 0) + 100;
+                Auth.updateUser(user);
+                showToast('🏅 Badge Unlocked: Zen Master!', 'success');
+            }
         }
     }
 }
