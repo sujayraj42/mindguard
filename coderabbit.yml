@@ -1,0 +1,11 @@
+name: CodeRabbit
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  coderabbit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: coderabbitai/coderabbit-action@v1
