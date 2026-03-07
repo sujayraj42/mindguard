@@ -4,6 +4,7 @@
 
 let breathingInterval = null;
 let breathingTimeout = null;
+let breathingCountInterval = null;
 let meditationInterval = null;
 let breathingSessions = 0;
 
@@ -61,7 +62,8 @@ function runBreathingCycle(phases, circle, text, instruction) {
 
         // Visual countdown
         let countdown = Math.floor(phase.duration / 1000);
-        const countInterval = setInterval(() => {
+        if (breathingCountInterval) clearInterval(breathingCountInterval);
+        breathingCountInterval = setInterval(() => {
             countdown--;
             if (countdown > 0) {
                 text.textContent = `${phase.label} ${countdown}`;
@@ -69,7 +71,8 @@ function runBreathingCycle(phases, circle, text, instruction) {
         }, 1000);
 
         breathingTimeout = setTimeout(() => {
-            clearInterval(countInterval);
+            clearInterval(breathingCountInterval);
+            breathingCountInterval = null;
             phaseIndex++;
             if (phaseIndex >= phases.length) {
                 phaseIndex = 0;
@@ -89,8 +92,10 @@ function stopBreathing() {
 
     if (breathingTimeout) clearTimeout(breathingTimeout);
     if (breathingInterval) clearInterval(breathingInterval);
+    if (breathingCountInterval) clearInterval(breathingCountInterval);
     breathingTimeout = null;
     breathingInterval = null;
+    breathingCountInterval = null;
 
     const circle = document.getElementById('breathing-circle');
     const text = document.getElementById('breathing-text');

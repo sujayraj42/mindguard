@@ -2,6 +2,17 @@
    MindGuard – App Core (Router + Global)
    ============================================ */
 
+// ---- HTML Sanitization (XSS protection) ----
+function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // ---- Page Navigation ----
 const PAGE_TITLES = {
     checkin: 'Weekly Check-in',

@@ -66,19 +66,22 @@ function renderForumPosts() {
 
   container.innerHTML = allPosts.map(post => {
     const replyCount = (post.replies || []).length;
+    const safeAuthor = escapeHtml(post.author);
+    const safeTitle = escapeHtml(post.title);
+    const safeContent = escapeHtml(post.content);
     return `
       <div class="forum-post glass-card-static" id="post-${post.id}" onclick="togglePostReplies('${post.id}')">
         <div class="forum-post-header">
-          <div class="forum-post-avatar">${post.author[0]}</div>
+          <div class="forum-post-avatar">${safeAuthor[0]}</div>
           <div>
-            <strong style="font-size:0.9rem;">${post.author}</strong>
-            <div class="forum-post-meta">${post.time}</div>
+            <strong style="font-size:0.9rem;">${safeAuthor}</strong>
+            <div class="forum-post-meta">${escapeHtml(post.time)}</div>
           </div>
         </div>
-        <h3>${post.title}</h3>
-        <p>${post.content}</p>
+        <h3>${safeTitle}</h3>
+        <p>${safeContent}</p>
         <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
-          ${(post.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}
+          ${(post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
         </div>
         <div class="forum-post-footer">
           <button class="forum-action" onclick="event.stopPropagation();upvotePost('${post.id}')">
@@ -94,13 +97,13 @@ function renderForumPosts() {
         <div id="replies-${post.id}" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border-subtle);">
           ${(post.replies || []).map(r => `
             <div style="display:flex;gap:10px;margin-bottom:12px;">
-              <div class="forum-post-avatar" style="width:28px;height:28px;font-size:0.65rem;">${r.author[0]}</div>
+              <div class="forum-post-avatar" style="width:28px;height:28px;font-size:0.65rem;">${escapeHtml(r.author)[0]}</div>
               <div>
                 <div style="display:flex;gap:8px;align-items:center;">
-                  <strong style="font-size:0.8rem;">${r.author}</strong>
-                  <span style="font-size:0.7rem;color:var(--text-muted);">${r.time}</span>
+                  <strong style="font-size:0.8rem;">${escapeHtml(r.author)}</strong>
+                  <span style="font-size:0.7rem;color:var(--text-muted);">${escapeHtml(r.time)}</span>
                 </div>
-                <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:4px;">${r.text}</p>
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-top:4px;">${escapeHtml(r.text)}</p>
               </div>
             </div>
           `).join('')}

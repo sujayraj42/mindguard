@@ -120,7 +120,7 @@ function renderJournalEntries() {
           <span style="font-size:0.8rem;color:var(--text-muted);">${date}</span>
           <span class="badge ${badgeClass}">${emoji} ${e.sentiment_label}</span>
         </div>
-        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.6;">${e.content}</p>
+        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.6;">${escapeHtml(e.content)}</p>
       </div>
     `;
     }).join('');

@@ -254,6 +254,8 @@ async def get_journal(user_id: str = Depends(get_current_user)):
 @router.post("/api/forum", response_model=ForumPostResponse)
 async def create_forum_post(data: ForumPostCreate, user_id: str = Depends(get_current_user)):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
 
     user = await db.users.find_one({"_id": ObjectId(user_id)})
     alias = user.get("anonymous_alias", "Anonymous") if user else "Anonymous"
@@ -309,6 +311,8 @@ async def get_forum_posts():
 @router.post("/api/forum/{post_id}/upvote")
 async def upvote_post(post_id: str, user_id: str = Depends(get_current_user)):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
     post = await db.forum_posts.find_one({"_id": ObjectId(post_id)})
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
@@ -326,6 +330,8 @@ async def upvote_post(post_id: str, user_id: str = Depends(get_current_user)):
 @router.post("/api/forum/{post_id}/reply")
 async def reply_to_post(post_id: str, data: ForumReplyCreate, user_id: str = Depends(get_current_user)):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
 
     user = await db.users.find_one({"_id": ObjectId(user_id)})
     alias = user.get("anonymous_alias", "Anonymous") if user else "Anonymous"
