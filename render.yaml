@@ -16,3 +16,5 @@ services:
         value: 1440
       - key: PYTHON_VERSION
         value: 3.13.0
+      - key: FRONTEND_URL
+        value: https://mindguard-fawn.vercel.app
