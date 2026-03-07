@@ -101,22 +101,39 @@
                 return false;
             }
 
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return false;
+            }
+
             const btn = document.getElementById('signup-btn');
             btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;"></div> Creating account...';
             btn.disabled = true;
 
             const data = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
                 password: password,
                 role: document.getElementById('role').value
             };
+
+            if (!data.name || !data.email) {
+                showToast('Please fill in all fields', 'error');
+                btn.innerHTML = 'Create Account';
+                btn.disabled = false;
+                return false;
+            }
 
             try {
                 const result = await Auth.signup(data);
                 if (result.success) {
                     showToast('Account created! Redirecting...', 'success');
-                    setTimeout(() => window.location.href = 'dashboard.html', 1000);
+                    // Redirect admin/counselor to admin dashboard
+                    const user = result.user || Auth.getUser();
+                    const dest = (user && (user.role === 'admin' || user.role === 'counselor'))
+                        ? 'admin.html' : 'dashboard.html';
+                    setTimeout(() => window.location.href = dest, 1000);
+                    return; // Don't re-enable button, we're redirecting
                 } else {
                     showToast(result.error || 'Signup failed', 'error');
                 }

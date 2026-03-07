@@ -376,6 +376,8 @@ async def predict_risk(data: PredictRequest, user_id: str = Depends(get_current_
 @router.get("/api/admin/stats")
 async def get_admin_stats(user_id: str = Depends(get_current_user)):
     db = get_db()
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database unavailable. Please try again later.")
 
     # Verify admin/counselor role
     user = await db.users.find_one({"_id": ObjectId(user_id)})

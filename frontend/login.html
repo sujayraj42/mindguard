@@ -82,14 +82,26 @@
             btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;"></div> Signing in...';
             btn.disabled = true;
 
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                btn.innerHTML = 'Sign In';
+                btn.disabled = false;
+                return;
+            }
 
             try {
                 const result = await Auth.login(email, password);
                 if (result.success) {
                     showToast('Welcome back! Redirecting...', 'success');
-                    setTimeout(() => window.location.href = 'dashboard.html', 1000);
+                    // Redirect admin/counselor to admin dashboard
+                    const user = result.user || Auth.getUser();
+                    const dest = (user && (user.role === 'admin' || user.role === 'counselor'))
+                        ? 'admin.html' : 'dashboard.html';
+                    setTimeout(() => window.location.href = dest, 1000);
+                    return; // Don't re-enable button, we're redirecting
                 } else {
                     showToast(result.error || 'Invalid credentials', 'error');
                 }

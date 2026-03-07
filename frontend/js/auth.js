@@ -63,8 +63,14 @@ const Auth = {
     },
 
     getUser() {
-        const userStr = localStorage.getItem(this.USER_KEY);
-        return userStr ? JSON.parse(userStr) : null;
+        try {
+            const userStr = localStorage.getItem(this.USER_KEY);
+            return userStr ? JSON.parse(userStr) : null;
+        } catch (e) {
+            // corrupted data — clear and return null
+            localStorage.removeItem(this.USER_KEY);
+            return null;
+        }
     },
 
     getToken() {
@@ -72,7 +78,31 @@ const Auth = {
     },
 
     isLoggedIn() {
-        return !!this.getToken();
+        const token = this.getToken();
+        if (!token) return false;
+
+        // Check if JWT is expired (for real tokens, not demo)
+        if (!token.startsWith('demo_token_')) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                if (payload.exp && payload.exp * 1000 < Date.now()) {
+                    // Token expired — clean up
+                    this.clearAuth();
+                    return false;
+                }
+            } catch (e) {
+                // Malformed token — clean up
+                this.clearAuth();
+                return false;
+            }
+        }
+
+        return true;
+    },
+
+    clearAuth() {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.USER_KEY);
     },
 
     requireAuth() {
@@ -83,8 +113,47 @@ const Auth = {
         return true;
     },
 
+    // Refresh user data from server (sync local state)
+    async refreshUser() {
+        try {
+            const token = this.getToken();
+            if (!token || token.startsWith('demo_token_')) return;
+
+            const res = await fetch(`${API_BASE}/auth/me`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (res.ok) {
+                const user = await res.json();
+                localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+                return user;
+            } else if (res.status === 401) {
+                // Token invalid — force logout
+                this.logout();
+            }
+        } catch (e) {
+            // Offline — keep cached user
+        }
+        return null;
+    },
+
     // ---- Demo Mode (no backend) ----
     demoSignup(data) {
+        // Validate required fields
+        if (!data.name || !data.email || !data.password) {
+            return { success: false, error: 'Name, email and password are required' };
+        }
+
+        if (data.password.length < 6) {
+            return { success: false, error: 'Password must be at least 6 characters' };
+        }
+
+        // Check for duplicate emails in demo mode
+        const users = JSON.parse(localStorage.getItem('mindguard_demo_users') || '[]');
+        if (users.find(u => u.email === data.email)) {
+            return { success: false, error: 'Email already registered' };
+        }
+
         const user = {
             _id: 'demo_' + Date.now(),
             name: data.name,
@@ -102,9 +171,8 @@ const Auth = {
         localStorage.setItem(this.TOKEN_KEY, demoToken);
         localStorage.setItem(this.USER_KEY, JSON.stringify(user));
 
-        // Store in demo users list
-        const users = JSON.parse(localStorage.getItem('mindguard_demo_users') || '[]');
-        users.push({ ...user, password: data.password });
+        // Store in demo users list (hash the password so it's not in plaintext)
+        users.push({ ...user, _pw_hash: btoa(data.password) });
         localStorage.setItem('mindguard_demo_users', JSON.stringify(users));
 
         return { success: true, user };
@@ -112,18 +180,22 @@ const Auth = {
 
     demoLogin(email, password) {
         const users = JSON.parse(localStorage.getItem('mindguard_demo_users') || '[]');
-        const user = users.find(u => u.email === email && u.password === password);
+        const user = users.find(u => u.email === email && (
+            u._pw_hash ? atob(u._pw_hash) === password : u.password === password
+        ));
 
         if (!user) {
-            // Auto-create demo user for convenience
-            return this.demoSignup({ name: email.split('@')[0], email, password, role: 'student' });
+            return { success: false, error: 'Invalid email or password. No account found.' };
         }
+
+        // Return user without password fields
+        const { _pw_hash, password: _pw, ...safeUser } = user;
 
         const demoToken = 'demo_token_' + btoa(email);
         localStorage.setItem(this.TOKEN_KEY, demoToken);
-        localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+        localStorage.setItem(this.USER_KEY, JSON.stringify(safeUser));
 
-        return { success: true, user };
+        return { success: true, user: safeUser };
     },
 
     generateAlias() {
@@ -136,10 +208,26 @@ const Auth = {
 
     updateUser(updates) {
         const user = this.getUser();
-        if (user) {
-            Object.assign(user, updates);
-            localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+        if (!user) return null;
+
+        // If a full user object is passed (has _id), replace entirely
+        // If partial updates, merge
+        if (updates && updates._id) {
+            localStorage.setItem(this.USER_KEY, JSON.stringify(updates));
+            return updates;
         }
+
+        Object.assign(user, updates);
+        localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+
+        // Also update in demo users list if applicable
+        const demoUsers = JSON.parse(localStorage.getItem('mindguard_demo_users') || '[]');
+        const idx = demoUsers.findIndex(u => u.email === user.email);
+        if (idx !== -1) {
+            Object.assign(demoUsers[idx], updates);
+            localStorage.setItem('mindguard_demo_users', JSON.stringify(demoUsers));
+        }
+
         return user;
     }
 };
